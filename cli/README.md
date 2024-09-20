@@ -1,16 +1,9 @@
-<p align="center">
-  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/t3-oss/create-t3-app/99286f37324330ecdf75132fae1f246440a88035/www/public/images/t3-light.svg">
-  <img src="https://raw.githubusercontent.com/t3-oss/create-t3-app/99286f37324330ecdf75132fae1f246440a88035/www/public/images/t3-dark.svg" width="130" alt="Logo for T3">
-</picture>
-</p>
-
 <h1 align="center">
-  create-t3-app
+  create-t3cf-app
 </h1>
 
 <p align="center">
-  Interactive CLI to start a full-stack, typesafe Next.js app.
+  The easiest way to build t3 stack styled nextjs apps on Cloudflare.
 </p>
 
 <p align="center">
@@ -19,7 +12,7 @@
 
 <div align="center">
 
-[![PRs-Welcome][contribute-image]][contribute-url] [![Discord](https://img.shields.io/discord/966627436387266600?color=%235865F2&label=Discord&logo=discord&logoColor=%23fff)](https://t3.gg/discord) [![NPM version][npm-image]][npm-url]
+[![PRs-Welcome][contribute-image]][contribute-url] [![NPM version][npm-image]][npm-url]
 [![Downloads][downloads-image]][npm-url]
 
 </div>
