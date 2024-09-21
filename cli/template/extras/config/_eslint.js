@@ -2,7 +2,7 @@
 export const _initialConfig = {
   parser: "@typescript-eslint/parser",
   parserOptions: { project: true },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "next-on-pages"],
   extends: [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",

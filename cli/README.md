@@ -1,5 +1,5 @@
 <h1 align="center">
-  create-t3cf-app
+  WIP: Fork of create-t3cf-app
 </h1>
 
 <p align="center">
@@ -16,16 +16,6 @@
 [![Downloads][downloads-image]][npm-url]
 
 </div>
-
-<a href="http://www.youtube.com/watch?v=PbjHxIuHduU" target="_blank">
-  <p align="center">
-    <img src="https://t3.gg/random/T3%20Stack%20V4.png" alt="Video thumbnail of Theo with an indecipherable expression on his face" width="320" />
-  </p>
-</a>
-
-<a href="http://www.youtube.com/watch?v=PbjHxIuHduU" target="_blank">
-  <p align="center">Watch Theo's overview on Youtube here</p>
-</a>
 
 ## Table of contents
 
