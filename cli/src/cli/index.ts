@@ -2,7 +2,7 @@ import * as p from "@clack/prompts";
 import chalk from "chalk";
 import { Command } from "commander";
 
-import { CREATE_T3_APP, DEFAULT_APP_NAME } from "~/consts.js";
+import { CREATE_CF_APP, DEFAULT_APP_NAME } from "~/consts.js";
 import {
   databaseProviders,
   type AvailablePackages,
@@ -70,7 +70,7 @@ export const runCli = async (): Promise<CliResults> => {
   const cliResults = defaultOptions;
 
   const program = new Command()
-    .name(CREATE_T3_APP)
+    .name(CREATE_CF_APP)
     .description("A CLI for creating web applications with the t3 stack")
     .argument(
       "[dir]",
@@ -162,9 +162,9 @@ export const runCli = async (): Promise<CliResults> => {
   // FIXME: TEMPORARY WARNING WHEN USING YARN 3. SEE ISSUE #57
   if (process.env.npm_config_user_agent?.startsWith("yarn/3")) {
     logger.warn(`  WARNING: It looks like you are using Yarn 3. This is currently not supported,
-  and likely to result in a crash. Please run create-t3-app with another
+  and likely to result in a crash. Please run create-t3cf-app with another
   package manager such as bun, npm, or Yarn Classic.
-  See: https://github.com/t3-oss/create-t3-app/issues/57`);
+  See: https://github.com/t3-oss/create-t3cf-app/issues/57`);
   }
 
   // Needs to be separated outside the if statement to correctly infer the type as string | undefined
@@ -356,11 +356,11 @@ export const runCli = async (): Promise<CliResults> => {
       },
     };
   } catch (err) {
-    // If the user is not calling create-t3-app from an interactive terminal, inquirer will throw an IsTTYError
+    // If the user is not calling create-t3cf-app from an interactive terminal, inquirer will throw an IsTTYError
     // If this happens, we catch the error, tell the user what has happened, and then continue to run the program with a default t3 app
     if (err instanceof IsTTYError) {
       logger.warn(`
-  ${CREATE_T3_APP} needs an interactive terminal to provide options`);
+  ${CREATE_CF_APP} needs an interactive terminal to provide options`);
 
       const shouldContinue = await p.confirm({
         message: `Continue scaffolding a default T3 app?`,
