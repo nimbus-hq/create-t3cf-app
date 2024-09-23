@@ -1,0 +1,21 @@
+---
+import { Image } from "astro:assets";
+---
+
+<header
+  class="flex justify-between items-center px-4 py-4 justify-self-center w-full"
+>
+  <div class="flex justify-between items-center gap-10">
+    <a href="/" class="">
+      <Image
+        src="/img/t3-light.svg"
+        alt="t3cf logo"
+        width={56}
+        height={56}
+        format="webp"
+        class=""
+      />
+    </a>
+    <a href="/docs" class="text-white max-sm:invisible">Docs</a>
+  </div>
+</header>
