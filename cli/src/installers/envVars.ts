@@ -16,6 +16,7 @@ export const envVariablesInstaller: Installer = ({
 
   const usingDb = usingPrisma || usingDrizzle;
   const usingPlanetScale = databaseProvider === "planetscale";
+  const usingLiqsql = databaseProvider === "sqlite";
 
   const envContent = getEnvContent(
     !!usingAuth,
@@ -30,6 +31,9 @@ export const envVariablesInstaller: Installer = ({
     if (usingPlanetScale) {
       if (usingAuth) envFile = "with-auth-db-planetscale.js";
       else envFile = "with-db-planetscale.js";
+    } else if (usingLiqsql) {
+      if (usingAuth) envFile = "with-auth-db-libsql.js";
+      else envFile = "with-db-libsql.js";
     } else {
       if (usingAuth) envFile = "with-auth-db.js";
       else envFile = "with-db.js";
@@ -49,9 +53,11 @@ export const envVariablesInstaller: Installer = ({
   }
 
   const envDest = path.join(projectDir, ".env");
+  const devVarsDest = path.join(projectDir, ".dev.vars");
   const envExampleDest = path.join(projectDir, ".env.example");
 
-  fs.writeFileSync(envDest, envContent, "utf-8");
+  fs.writeFileSync(envDest, envHeader + envContent, "utf-8");
+  fs.writeFileSync(devVarsDest, devVarsContent + envContent, "utf-8");
   fs.writeFileSync(envExampleDest, exampleEnvContent + envContent, "utf-8");
 };
 
@@ -95,6 +101,8 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
       content += `# The @libsql/client/web does not support local file URLs.
 # You can run the sqlite database using "./start-database.sh"
 DATABASE_URL="http://127.0.0.1:8080"
+# Auth tokens aren't necessary when developing with local database
+# DATABASE_AUTH_TOKEN="your-auth-token-here"
 `;
     }
     content += "\n";
@@ -108,6 +116,7 @@ DATABASE_URL="http://127.0.0.1:8080"
 # https://next-auth.js.org/configuration/options#secret
 # NEXTAUTH_SECRET=""
 NEXTAUTH_URL="http://localhost:3000"
+AUTH_TRUST_HOST=http://localhost:3000
 
 # Next Auth Discord Provider
 DISCORD_CLIENT_ID=""
@@ -123,6 +132,24 @@ DISCORD_CLIENT_SECRET=""
 
   return content;
 };
+
+const envHeader = `
+# If you want to ensure the environment variables are available to wrangler
+# you will need to copy them over to ".dev.vars"
+`
+
+  .trim()
+  .concat("\n\n");
+
+const devVarsContent = `
+# Wrangler, the tool used to emulate the actual cloudflare runtime does not
+# read environment variables from .env, as a result you need to copy over
+# your environment variables to this file before you run using wrangler.
+# If you are not wanting to test with wrangler then you can ignore this file.
+`
+
+  .trim()
+  .concat("\n\n");
 
 const exampleEnvContent = `
 # Since the ".env" file is gitignored, you can use the ".env.example" file to
