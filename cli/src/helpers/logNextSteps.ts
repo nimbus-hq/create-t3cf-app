@@ -35,7 +35,7 @@ export const logNextSteps = async ({
     }
   }
 
-  if (["postgres", "mysql"].includes(databaseProvider)) {
+  if (["postgres", "mysql", "sqlite"].includes(databaseProvider)) {
     logger.info("  Start up a database, if needed using './start-database.sh'");
   }
 

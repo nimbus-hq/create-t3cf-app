@@ -75,7 +75,7 @@ export const buildPkgInstallerMap = (
     installer: trpcInstaller,
   },
   dbContainer: {
-    inUse: ["mysql", "postgres"].includes(databaseProvider),
+    inUse: ["mysql", "postgres", "sqlite"].includes(databaseProvider),
     installer: dbContainerInstaller,
   },
   envVariables: {

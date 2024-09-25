@@ -92,7 +92,10 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
     } else if (databaseProvider === "postgres") {
       content += `DATABASE_URL="postgresql://postgres:password@localhost:5432/${scopedAppName}"`;
     } else if (databaseProvider === "sqlite") {
-      content += 'DATABASE_URL="file:./db.sqlite"';
+      content += `# The @libsql/client/web does not support local file URLs.
+# You can run the sqlite database using "./start-database.sh"
+DATABASE_URL="http://127.0.0.1:8080"
+`;
     }
     content += "\n";
   }

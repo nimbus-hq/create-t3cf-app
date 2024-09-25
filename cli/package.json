@@ -1,15 +1,15 @@
 {
-  "name": "create-t3-app",
+  "name": "create-t3cf-app",
   "version": "7.37.0",
   "description": "Create web application with the t3 stack",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/t3-oss/create-t3-app.git",
+    "url": "https://github.com/nimbus-hq/create-t3cf-app.git",
     "directory": "cli"
   },
   "keywords": [
-    "create-t3-app",
+    "create-t3cf-app",
     "init.tips",
     "next.js",
     "t3-stack",
@@ -20,7 +20,7 @@
   "type": "module",
   "exports": "./dist/index.js",
   "bin": {
-    "create-t3-app": "./dist/index.js"
+    "create-t3cf-app": "./dist/index.js"
   },
   "files": [
     "dist",
