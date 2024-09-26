@@ -8,8 +8,8 @@ import {
   type AvailablePackages,
   type DatabaseProvider,
 } from "~/installers/index.js";
-import { getVersion } from "~/utils/getT3Version.js";
 import { getUserPkgManager } from "~/utils/getUserPkgManager.js";
+import { getVersion } from "~/utils/getVersion.js";
 import { IsTTYError } from "~/utils/isTTYError.js";
 import { logger } from "~/utils/logger.js";
 import { validateAppName } from "~/utils/validateAppName.js";
@@ -258,18 +258,18 @@ export const runCli = async (): Promise<CliResults> => {
             message: "Would you like to use tRPC?",
           });
         },
-        authentication: () => {
-          return p.select({
-            message: "What authentication provider would you like to use?",
-            options: [
-              { value: "none", label: "None" },
-              { value: "next-auth", label: "NextAuth.js" },
-              // Maybe later
-              // { value: "clerk", label: "Clerk" },
-            ],
-            initialValue: "none",
-          });
-        },
+        // authentication: () => {
+        //   return p.select({
+        //     message: "What authentication provider would you like to use?",
+        //     options: [
+        //       { value: "none", label: "None" },
+        //       { value: "next-auth", label: "NextAuth.js" },
+        //       // Maybe later
+        //       // { value: "clerk", label: "Clerk" },
+        //     ],
+        //     initialValue: "none",
+        //   });
+        // },
         database: () => {
           return p.select({
             message: "What database ORM would you like to use?",
@@ -285,6 +285,35 @@ export const runCli = async (): Promise<CliResults> => {
           return p.confirm({
             message: "Would you like to use Next.js App Router?",
             initialValue: true,
+          });
+        },
+        authentication: ({ results }) => {
+          const isPagesRouter = !results.appRouter;
+          if (isPagesRouter) {
+            p.note(
+              chalk.yellow(
+                "NextAuth.js is currently unsupported with the Pages Router. It will be disabled."
+              )
+            );
+          }
+
+          const options: { value: string; label: string }[] = [
+            { value: "none", label: "None" },
+            // Maybe later
+            // { value: "clerk", label: "Clerk" },
+          ];
+
+          if (!isPagesRouter) {
+            options.push({
+              value: "next-auth",
+              label: "NextAuth.js",
+            });
+          }
+
+          return p.select({
+            message: "What authentication provider would you like to use?",
+            options,
+            initialValue: "none",
           });
         },
         databaseProvider: ({ results }) => {

@@ -1,5 +1,4 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { type NextRequest } from "next/server";
 
 import { env } from "~/env";
 import { appRouter } from "~/server/api/root";
@@ -9,10 +8,17 @@ export const config = {
   runtime: "edge",
 };
 
-export default async function handler(req: NextRequest) {
+/**
+ * Configuring handler to be Cloudflare compatible.
+ *
+ * @see https://trpc.io/docs/server/adapters/fetch#create-cloudflare-worker
+ */
+async function handler(req: Request): Promise<Response> {
   return fetchRequestHandler({
     endpoint: "/api/trpc",
+    req,
     router: appRouter,
+    createContext: createTRPCContext,
     onError:
       env.NODE_ENV === "development"
         ? ({ path, error }) => {
@@ -21,7 +27,7 @@ export default async function handler(req: NextRequest) {
             );
           }
         : undefined,
-    req,
-    createContext: createTRPCContext,
   });
 }
+
+export default handler;

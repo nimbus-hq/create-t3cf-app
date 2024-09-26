@@ -15,7 +15,7 @@ import { logger } from "~/utils/logger.js";
 import { parseNameAndPath } from "~/utils/parseNameAndPath.js";
 import { renderTitle } from "~/utils/renderTitle.js";
 import { installDependencies } from "./helpers/installDependencies.js";
-import { getVersion } from "./utils/getT3Version.js";
+import { getVersion } from "./utils/getVersion.js";
 import {
   getNpmVersion,
   renderVersionWarning,

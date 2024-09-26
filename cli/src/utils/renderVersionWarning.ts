@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import https from "https";
 
-import { getVersion } from "./getT3Version.js";
+import { getVersion } from "./getVersion.js";
 import { logger } from "./logger.js";
 
 export const renderVersionWarning = (npmVersion: string) => {

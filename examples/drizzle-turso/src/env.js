@@ -9,7 +9,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     /**
-     *  Auth Tokens are required unless you are developing locally
+     * Auth Tokens are required unless you are developing locally.
      *
      * @see https://docs.turso.tech/sdk/authentication#auth-tokens
      */
