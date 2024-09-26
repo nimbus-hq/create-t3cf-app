@@ -1,0 +1,19 @@
+@font-face {
+  font-family: 'EraserRegular';
+  src: url('fonts/EraserRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.font-eraser {
+  font-family: 'EraserRegular', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #131313;
+  position: relative;
+}

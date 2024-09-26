@@ -1,5 +1,5 @@
 ---
-import Header from "../components/Header.astro";
+import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
@@ -9,12 +9,12 @@ interface Props {
 const {
   title,
   description = "The best way to start a fullstack, typesafe Next.js app using cloudflare.",
-  image = "/img/t3-dark.svg",
+  image = "/img/t3-light.svg",
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -25,16 +25,9 @@ const {
     <title>{title}</title>
   </head>
   <body
-    class="relative min-h-screen bg-gradient-to-t from-[#404041] to-[#131313]"
+    class="h-full relative bg-gradient-to-t from-[#131313] via-[#404041] -[#131313]"
   >
-    <div
-      class="absolute inset-0 aspect-[960/540] w-[100%] bg-no-repeat bg-center bg-cover bg-[url('/img/top-wave.svg')] h-screen"
-    >
-      <div class="mx-auto max-w-[1280px]">
-        <Header />
-        <slot />
-      </div>
-    </div>
+    <slot />
   </body>
 </html>
 <!-- TODO Fix the base dom white when scrolling. -->
