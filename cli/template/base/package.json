@@ -4,13 +4,13 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "predev": "cp .env .dev.vars",
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
     "lint": "next lint",
-    "pages:build": "bunx @cloudflare/next-on-pages",
-    "preview": "bun pages:build && wrangler pages dev --port 3000",
-    "deploy": "bun pages:build && wrangler pages deploy",
+    "prebuild": "cp .env .dev.vars",
+    "build": "bunx @cloudflare/next-on-pages",
+    "start": "bun build && wrangler pages dev --port 3000",
+    "deploy": "bun build && wrangler pages deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts"
   },
   "dependencies": {

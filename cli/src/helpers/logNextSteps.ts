@@ -35,7 +35,10 @@ export const logNextSteps = async ({
     }
   }
 
-  if (["postgres", "mysql", "sqlite"].includes(databaseProvider)) {
+  if (
+    ["postgres", "mysql"].includes(databaseProvider) ||
+    (["sqlite", "turso"].includes(databaseProvider) && packages?.drizzle.inUse)
+  ) {
     logger.info("  Start up a database, if needed using './start-database.sh'");
   }
 

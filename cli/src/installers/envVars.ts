@@ -16,7 +16,8 @@ export const envVariablesInstaller: Installer = ({
 
   const usingDb = usingPrisma || usingDrizzle;
   const usingPlanetScale = databaseProvider === "planetscale";
-  const usingLiqsql = databaseProvider === "sqlite";
+  // const usingLiqsql = databaseProvider === "sqlite";
+  const usingTurso = databaseProvider === "turso";
 
   const envContent = getEnvContent(
     !!usingAuth,
@@ -31,7 +32,7 @@ export const envVariablesInstaller: Installer = ({
     if (usingPlanetScale) {
       if (usingAuth) envFile = "with-auth-db-planetscale.js";
       else envFile = "with-db-planetscale.js";
-    } else if (usingLiqsql) {
+    } else if (usingTurso) {
       if (usingAuth) envFile = "with-auth-db-libsql.js";
       else envFile = "with-db-libsql.js";
     } else {
@@ -97,13 +98,21 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
       content += `DATABASE_URL="mysql://root:password@localhost:3306/${scopedAppName}"`;
     } else if (databaseProvider === "postgres") {
       content += `DATABASE_URL="postgresql://postgres:password@localhost:5432/${scopedAppName}"`;
-    } else if (databaseProvider === "sqlite") {
-      content += `# The @libsql/client/web does not support local file URLs.
+    } else if (databaseProvider === "turso" || databaseProvider === "sqlite") {
+      if (usingDrizzle) {
+        content += `# The @libsql/client/web does not support local file URLs.
 # You can run the sqlite database using "./start-database.sh"
 DATABASE_URL="http://127.0.0.1:8080"
 # Auth tokens aren't necessary when developing with local database
-# DATABASE_AUTH_TOKEN="your-auth-token-here"
-`;
+# DATABASE_AUTH_TOKEN="your-auth-token-here"`;
+      } else {
+        content += `# The @libsql/client/web does not support local file URLs.
+# Due to limitations of Prisma and the libsql client you can only use actual
+# Turso databases currently, you cannot run against a local one.
+DATABASE_URL="libsql://<db>-<username>.turso.io"
+DATABASE_AUTH_TOKEN="your-auth-token-here"`;
+      }
+      // update for sqlite support later...
     }
     content += "\n";
   }

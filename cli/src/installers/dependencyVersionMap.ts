@@ -12,6 +12,12 @@ export const dependencyVersionMap = {
   prisma: "^5.14.0",
   "@prisma/client": "^5.14.0",
   "@prisma/adapter-planetscale": "^5.14.0",
+  "@prisma/adapter-libsql": "^5.20.0",
+
+  // Prisma and Drizzle
+  // needs to be this version to comply with drizzle and Prisma
+  // TODO: add support for multiple versions of a package
+  "@libsql/client": "^0.8.0",
 
   // Drizzle
   "drizzle-kit": "^0.24.0",
@@ -20,7 +26,6 @@ export const dependencyVersionMap = {
   mysql2: "^3.11.0",
   "@planetscale/database": "^1.19.0",
   postgres: "^3.4.4",
-  "@libsql/client": "^0.9.0",
 
   // TailwindCSS
   tailwindcss: "^3.4.3",
