@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@headlessui/r
 import clsx from "clsx";
 import { Fragment, useState } from "react";
 
-import { DocumentDuplicateIcon } from '@heroicons/react/16/solid';
+import { CheckIcon, DocumentDuplicateIcon } from '@heroicons/react/16/solid';
 
 const commands = [
   {
@@ -46,14 +46,15 @@ export default function ClipboardSelect() {
   };
 
   return (
-    <div className="mx-auto flex flex-row bg-cfdark rounded-lg border text-white mt-10 bg-opacity-85 p-2 sm:text-sm md:px-3 md:py-3 md:text-lg lg:px-5 lg:py-4 lg:text-xl">
-      <code className="mx-4 p-1">{commandDetails.manager + " " + commandDetails.command}</code>
+    <div className="mx-auto flex flex-row bg-cfdark rounded-lg border border-slate-500 text-white mt-10 bg-opacity-85 p-2 sm:text-sm md:px-3 md:py-3 md:text-lg lg:px-5 lg:py-4 lg:text-xl">
+      <code className="mx-4 p-1 transition-transform">{commandDetails.manager + " " + commandDetails.command}</code>
       <div className="flex items-center gap-2">
         <Menu as="div">
           <div className="relative">
-            <MenuButton className="mx-4 relative flex cursor-pointer items-center justify-center rounded-lg border bg-cfdark text-left focus:outline-none hover:bg-slate-400 sm:text-sm">
-              <DocumentDuplicateIcon className="w-6 p-1" color="white"/>
+            <MenuButton disabled={coolDown} className="mx-4 relative flex cursor-pointer items-center justify-center rounded-lg border border-slate-500 bg-cfdark text-left focus:outline-none hover:bg-slate-400 sm:text-sm opacity-75">
+              {coolDown ? <CheckIcon className={'w-6 p-1'}/> : <DocumentDuplicateIcon className="w-6 p-1" color="white"/>}
             </MenuButton>
+            
             <Transition
               as={Fragment}
               enter={"transition ease-out duration-100"}
@@ -62,7 +63,7 @@ export default function ClipboardSelect() {
             >
               <MenuItems
                 className={clsx(
-                  "focus-none shadow-l t3-scrollbar absolute right-0 mt-1 max-h-60 w-fit min-w-[6em] overflow-auto rounded-lg border bg-cfdark text-base focus:outline-none focus-visible:outline-none sm:text-sm dark:border-t3-purple-200/20",
+                  "focus-none shadow-l t3-scrollbar absolute right-0 mt-1 max-h-60 w-fit min-w-[6em] overflow-auto rounded-lg border border-slate-500 bg-cfdark text-base focus:outline-none focus-visible:outline-none sm:text-sm",
                 )}
               >
                 {commands.map(({ manager, command }) => (
@@ -79,7 +80,7 @@ export default function ClipboardSelect() {
                                 setCoolDown(true);
                                 setTimeout(() => {
                                   setCoolDown(false);
-                                }, 1000);
+                                }, 750);
                               })
                               .catch((err) => console.log(err));
                           }}

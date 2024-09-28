@@ -1,3 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Design System Theming */
+  html {
+    --color-default: 236 228 236;
+    --color-neutral: 29 40 58;
+    --color-primary: 112 64 255;
+    --color-secondary: 58 191 248;
+    --color-accent: 244 113 181;
+    --color-warning: 244 193 82;
+    --color-error: 251 111 132;
+    --color-success: 43 212 189;
+    --color-info: 12 166 233;
+    --color-foreground: 15 23 42;
+    --color-background: 236 228 236;
+
+  }
+
+  html.dark {
+    --color-default: 15 23 41;
+    --color-neutral: 29 40 58;
+    --color-primary: 112 64 255;
+    --color-secondary: 58 191 248;
+    --color-accent: 244 113 181;
+    --color-warning: 244 193 82;
+    --color-error: 251 111 132;
+    --color-success: 43 212 189;
+    --color-info: 12 166 233;
+    --color-foreground: 232 221 255;
+    --color-background: 15 23 41;
+
+  }
+
+  /* Typewriter */
+  .cursor::after {
+    display: block;
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 100%;
+    background-color: #fff;
+    animation: cursor 0.6s linear infinite alternate;
+    will-change: opacity;
+  }
+
+  .DocSearch-SearchBar {
+  }
+
+  #DocSearch-SearchBar {
+  }
+}
+
 @font-face {
   font-family: 'EraserRegular';
   src: url('fonts/EraserRegular.ttf') format('truetype');
