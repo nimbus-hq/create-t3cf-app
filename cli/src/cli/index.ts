@@ -331,38 +331,42 @@ export const runCli = async (): Promise<CliResults> => {
           p.note(
             chalk.yellow(`The following are currently unsupported:
     - PostgreSQL
-    - MySQL`)
+    - MySQL
+    - Plain SQLite (must use Turso)`)
           );
+
+          const options = [
+            // { value: "sqlite", label: "SQLite (LibSQL)" },
+            { value: "turso", label: "Turso (LibSQL)" },
+            // { value: "d1", label: "D1" },
+
+            /**
+             * TODO: add mysql support. Currently blocked by lack of lib support.
+             * Work is in progress so we will hopefully be able to add support soon.
+             *
+             * @see https://github.com/sidorares/node-mysql2
+             */
+            // { value: "mysql", label: "MySQL" },
+
+            /**
+             * TODO: add postgres support, may be possible with some clever patching.
+             * Main issue currently is Nextjs Edge limitations rather than worker limitations.
+             *
+             * @see https://github.com/porsager/postgres/issues/930
+             * @see https://github.com/vercel/next.js/discussions/50177 // relevant discussion
+             */
+            // { value: "postgres", label: "PostgreSQL" },
+
+            // TODO: add neon support
+            // { value: "neon", label: "Neon" },
+
+            { value: "planetscale", label: "PlanetScale" },
+          ];
+
           return p.select({
             message: "What database provider would you like to use?",
-            options: [
-              { value: "sqlite", label: "SQLite (LibSQL)" },
-              { value: "turso", label: "Turso" },
-              // { value: "d1", label: "D1" },
-
-              /**
-               * TODO: add mysql support. Currently blocked by lack of lib support.
-               * Work is in progress so we will hopefully be able to add support soon.
-               *
-               * @see https://github.com/sidorares/node-mysql2
-               */
-              // { value: "mysql", label: "MySQL" },
-
-              /**
-               * TODO: add postgres support, may be possible with some clever patching.
-               * Main issue currently is Nextjs Edge limitations rather than worker limitations.
-               *
-               * @see https://github.com/porsager/postgres/issues/930
-               * @see https://github.com/vercel/next.js/discussions/50177 // relevant discussion
-               */
-              // { value: "postgres", label: "PostgreSQL" },
-
-              // TODO: add neon support
-              // { value: "neon", label: "Neon" },
-
-              { value: "planetscale", label: "PlanetScale" },
-            ],
-            initialValue: "sqlite",
+            options: options,
+            initialValue: "turso",
           });
         },
         ...(!cliResults.flags.noGit && {

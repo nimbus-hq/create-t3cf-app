@@ -1,107 +1,92 @@
-# Contribution Guidelines
+# Contributing
 
-When contributing to `create-t3-app`, whether on GitHub or in other community spaces:
+When contributing to this repository, please first discuss the change you wish to make via issue,
+email, or any other method with the owners of this repository before making a change. 
 
-- Be respectful, civil, and open-minded.
-- Before opening a new pull request, try searching through the [issue tracker](https://github.com/t3-oss/create-t3-app/issues) for known issues or fixes.
-- If you want to make code changes based on your personal opinion(s), make sure you open an issue first describing the changes you want to make, and open a pull request only when your suggestions get approved by maintainers.
+Please note we have a code of conduct, please follow it in all your interactions with the project.
 
-## How to Contribute
+## Pull Request Process
 
-### Prerequisites
+1. Ensure any install or build dependencies are removed before the end of the layer when doing a 
+   build.
+2. Update the README.md with details of changes to the interface, this includes new environment 
+   variables, exposed ports, useful file locations and container parameters.
+3. Increase the version numbers in any examples files and the README.md to the new version that this
+   Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
+4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you 
+   do not have permission to do that, you may request the second reviewer to merge it for you.
 
-In order to not waste your time implementing a change that has already been declined, or is generally not needed, start by [opening an issue](https://github.com/t3-oss/create-t3-app/issues/new/choose) describing the problem you would like to solve.
+## Code of Conduct
 
-### Contributing via Codesandbox
+### Our Pledge
 
-You can contribute to this documentation on codesandbox which will automatically run all the setup command for you. [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/t3-oss/create-t3-app).
+In the interest of fostering an open and welcoming environment, we as
+contributors and maintainers pledge to making participation in our project and
+our community a harassment-free experience for everyone, regardless of age, body
+size, disability, ethnicity, gender identity and expression, level of experience,
+nationality, personal appearance, race, religion, or sexual identity and
+orientation.
 
-### Setup your environment locally
+### Our Standards
 
-_Some commands will assume you have the Github CLI installed, if you haven't, consider [installing it](https://github.com/cli/cli#installation), but you can always use the Web UI if you prefer that instead._
+Examples of behavior that contributes to creating a positive environment
+include:
 
-In order to contribute to this project, you will need to fork the repository:
+* Using welcoming and inclusive language
+* Being respectful of differing viewpoints and experiences
+* Gracefully accepting constructive criticism
+* Focusing on what is best for the community
+* Showing empathy towards other community members
 
-```bash
-gh repo fork t3-oss/create-t3-app
-```
+Examples of unacceptable behavior by participants include:
 
-then, clone it to your local machine:
+* The use of sexualized language or imagery and unwelcome sexual attention or
+advances
+* Trolling, insulting/derogatory comments, and personal or political attacks
+* Public or private harassment
+* Publishing others' private information, such as a physical or electronic
+  address, without explicit permission
+* Other conduct which could reasonably be considered inappropriate in a
+  professional setting
 
-```bash
-gh repo clone <your-github-name>/create-t3-app
-```
+### Our Responsibilities
 
-This project uses [bun](https://bun.io) as its package manager. Install it if you haven't already:
+Project maintainers are responsible for clarifying the standards of acceptable
+behavior and are expected to take appropriate and fair corrective action in
+response to any instances of unacceptable behavior.
 
-```bash
-npm install -g bun
-```
+Project maintainers have the right and responsibility to remove, edit, or
+reject comments, commits, code, wiki edits, issues, and other contributions
+that are not aligned to this Code of Conduct, or to ban temporarily or
+permanently any contributor for other behaviors that they deem inappropriate,
+threatening, offensive, or harmful.
 
-Then, install the project's dependencies:
+### Scope
 
-```bash
-bun install
-```
+This Code of Conduct applies both within project spaces and in public spaces
+when an individual is representing the project or its community. Examples of
+representing a project or community include using an official project e-mail
+address, posting via an official social media account, or acting as an appointed
+representative at an online or offline event. Representation of a project may be
+further defined and clarified by project maintainers.
 
-### Implement your changes
+### Enforcement
 
-This project is a [Turborepo](https://turborepo.org/) monorepo. The code for the CLI is in the `cli` directory, and the docs is in the `www` directory. Now you're all setup and can start implementing your changes.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported by contacting the project team at <nimbus.hq.cloud@gmail.com>. All
+complaints will be reviewed and investigated and will result in a response that
+is deemed necessary and appropriate to the circumstances. The project team is
+obligated to maintain confidentiality with regard to the reporter of an incident.
+Further details of specific enforcement policies may be posted separately.
 
-Here are some useful scripts for when you are developing:
+Project maintainers who do not follow or enforce the Code of Conduct in good
+faith may face temporary or permanent repercussions as determined by other
+members of the project's leadership.
 
-| Command          | Description                                             |
-| ---------------- | ------------------------------------------------------- |
-| `bun dev:cli`   | Builds and starts the CLI in watch-mode                 |
-| `bun dev:www`   | Starts the development server for the docs with HMR     |
-| `bun build:cli` | Builds the CLI                                          |
-| `bun build:www` | Builds the docs                                         |
-| `bun build`     | Builds CLI and docs                                     |
-| `bun format`    | Formats the code                                        |
-| `bun lint`      | Lints the code                                          |
-| `bun lint:fix`  | Lints the code and fixes any errors                     |
-| `bun check`     | Checks your code for typeerrors, formatting and linting |
+### Attribution
 
-When making commits, make sure to follow the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) guidelines, i.e. prepending the message with `feat:`, `fix:`, `chore:`, `docs:`, etc... You can use `git status` to double check which files have not yet been staged for commit:
+This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
+available at [http://contributor-covenant.org/version/1/4][version]
 
-```bash
-git add <file> && git commit -m "feat/fix/chore/docs: commit message"
-```
-
-### When you're done
-
-Check that your code follows the project's style guidelines by running:
-
-```bash
-bun check
-```
-
-Please also make a manual, functional test of your changes.
-
-If your change should appear in the changelog, i.e. it changes some behavior of either the CLI or the outputted application, it must be captured by `changeset` which is done by running
-
-```bash
-bun changeset
-```
-
-and filling out the form with the appropriate information. Then, add the generated changeset to git:
-
-```bash
-git add .changeset/*.md && git commit -m "chore: add changeset"
-```
-
-When all that's done, it's time to file a pull request to upstream:
-
-```bash
-gh pr create --web
-```
-
-and fill out the title and body appropriately. Again, make sure to follow the [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) guidelines for your title.
-
-## Translations
-
-For more information on how to help with translation, please see the [contributing guidelines for our docs](https://github.com/t3-oss/create-t3-app/blob/main/www/TRANSLATIONS.md).
-
-## Credits
-
-This documented was inspired by the contributing guidelines for [cloudflare/wrangler2](https://github.com/cloudflare/wrangler2/blob/main/CONTRIBUTING.md).
+[homepage]: http://contributor-covenant.org
+[version]: http://contributor-covenant.org/version/1/4/

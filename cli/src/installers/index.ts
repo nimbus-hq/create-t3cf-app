@@ -77,7 +77,9 @@ export const buildPkgInstallerMap = (
     installer: trpcInstaller,
   },
   dbContainer: {
-    inUse: ["mysql", "postgres", "turso"].includes(databaseProvider),
+    inUse:
+      ["mysql", "postgres", "turso"].includes(databaseProvider) ||
+      (databaseProvider === "sqlite" && packages.includes("drizzle")),
     installer: dbContainerInstaller,
   },
   envVariables: {

@@ -3,11 +3,11 @@
 </h1>
 
 <p align="center">
-  The easiest way to build t3 stack styled nextjs apps on Cloudflare.
+  The easiest way to build T3 styled nextjs apps on Cloudflare.
 </p>
 
 <p align="center">
-  Get started with the <a rel="noopener noreferrer" target="_blank" href="https://init.tips">T3 Stack</a> by running <code>npm create t3-app@latest</code>
+  Get started with the <a rel="noopener noreferrer" target="_blank" href="https://init.tips">T3CF Stack</a> by running <code>npm create t3cf-app@latest</code>
 </p>
 
 <div align="center">

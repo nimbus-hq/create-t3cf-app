@@ -8,9 +8,11 @@
     "dev": "next dev",
     "lint": "next lint",
     "prebuild": "cp .env .dev.vars",
-    "build": "bunx @cloudflare/next-on-pages",
-    "start": "bun build && wrangler pages dev --port 3000",
-    "deploy": "bun build && wrangler pages deploy",
+    "build": "next build",
+    "start": "next start",
+    "pages:build": "bunx @cloudflare/next-on-pages",
+    "preview": "bun pages:build && wrangler pages dev --port 3000",
+    "deploy": "bun pages:build && wrangler pages deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts"
   },
   "dependencies": {

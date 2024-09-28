@@ -53,13 +53,11 @@ export const envVariablesInstaller: Installer = ({
     fs.copyFileSync(envSchemaSrc, envSchemaDest);
   }
 
-  const envDest = path.join(projectDir, ".env");
   const devVarsDest = path.join(projectDir, ".dev.vars");
-  const envExampleDest = path.join(projectDir, ".env.example");
+  const envExampleDest = path.join(projectDir, ".dev.vars.example");
 
-  fs.writeFileSync(envDest, envHeader + envContent, "utf-8");
   fs.writeFileSync(devVarsDest, devVarsContent + envContent, "utf-8");
-  fs.writeFileSync(envExampleDest, exampleEnvContent + envContent, "utf-8");
+  fs.writeFileSync(envExampleDest, exampleDevVarsContent + envContent, "utf-8");
 };
 
 const getEnvContent = (
@@ -105,14 +103,15 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
 DATABASE_URL="http://127.0.0.1:8080"
 # Auth tokens aren't necessary when developing with local database
 # DATABASE_AUTH_TOKEN="your-auth-token-here"`;
-      } else {
+      } else if (databaseProvider === "turso") {
         content += `# The @libsql/client/web does not support local file URLs.
 # Due to limitations of Prisma and the libsql client you can only use actual
 # Turso databases currently, you cannot run against a local one.
 DATABASE_URL="libsql://<db>-<username>.turso.io"
 DATABASE_AUTH_TOKEN="your-auth-token-here"`;
+      } else {
+        content += `DATABASE_URL="file:./db.sqlite"`;
       }
-      // update for sqlite support later...
     }
     content += "\n";
   }
@@ -142,32 +141,22 @@ DISCORD_CLIENT_SECRET=""
   return content;
 };
 
-const envHeader = `
-# If you want to ensure the environment variables are available to wrangler
-# you will need to copy them over to ".dev.vars"
-`
-
-  .trim()
-  .concat("\n\n");
-
 const devVarsContent = `
 # Wrangler, the tool used to emulate the actual cloudflare runtime does not
-# read environment variables from .env, as a result you need to copy over
-# your environment variables to this file before you run using wrangler.
-# If you are not wanting to test with wrangler then you can ignore this file.
+# read environment variables from .env, as a result you need to write
+# your environment variables to this file before you run your app.
 `
 
   .trim()
   .concat("\n\n");
 
-const exampleEnvContent = `
-# Since the ".env" file is gitignored, you can use the ".env.example" file to
-# build a new ".env" file when you clone the repo. Keep this file up-to-date
-# when you add new variables to \`.env\`.
+const exampleDevVarsContent = `
+# Since the ".dev.vars" file is gitignored, you can use the ".dev.vars.example" file to
+# build a new ".dev.vars" file when you clone the repo.
 
 # This file will be committed to version control, so make sure not to have any
 # secrets in it. If you are cloning this repo, create a copy of this file named
-# ".env" and populate it with your secrets.
+# ".dev.vars" and populate it with your secrets.
 `
   .trim()
   .concat("\n\n");
