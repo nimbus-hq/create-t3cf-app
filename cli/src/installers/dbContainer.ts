@@ -10,10 +10,17 @@ export const dbContainerInstaller: Installer = ({
   databaseProvider,
   projectName,
 }) => {
-  const scriptSrc = path.join(
-    PKG_ROOT,
-    `template/extras/start-database/${databaseProvider}.sh`
-  );
+  let dbScript: string;
+  switch (databaseProvider) {
+    case "sqlite":
+      // Drizzle needs this (due to libsql/web)
+      dbScript = `template/extras/start-database/turso.sh`;
+      break;
+    default:
+      dbScript = `template/extras/start-database/${databaseProvider}.sh`;
+  }
+
+  const scriptSrc = path.join(PKG_ROOT, dbScript);
   const scriptText = fs.readFileSync(scriptSrc, "utf-8");
   const scriptDest = path.join(projectDir, "start-database.sh");
   // for configuration with postgresql and mysql when project is created with '.' project name

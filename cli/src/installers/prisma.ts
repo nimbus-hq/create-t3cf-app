@@ -21,6 +21,12 @@ export const prismaInstaller: Installer = ({
     dependencies: ["@prisma/client"],
     devMode: false,
   });
+  if (databaseProvider === "turso")
+    addPackageDependency({
+      projectDir,
+      dependencies: ["@prisma/adapter-libsql", "@libsql/client"],
+      devMode: false,
+    });
   if (databaseProvider === "planetscale")
     addPackageDependency({
       projectDir,
@@ -30,15 +36,22 @@ export const prismaInstaller: Installer = ({
 
   const extrasDir = path.join(PKG_ROOT, "template/extras");
 
-  const schemaSrc = path.join(
-    extrasDir,
-    "prisma/schema",
-    `${packages?.nextAuth.inUse ? "with-auth" : "base"}${
-      databaseProvider === "planetscale" ? "-planetscale" : ""
-    }.prisma`
-  );
+  let prefix: string;
+  let name = "";
+  packages?.nextAuth.inUse ? (prefix = "with-auth") : (prefix = "base");
+  switch (databaseProvider) {
+    case "planetscale":
+      name = "-planetscale";
+      break;
+    case "turso":
+      name = "-turso";
+      break;
+  }
+  const schema = prefix + name + ".prisma";
+
+  const schemaSrc = path.join(extrasDir, "prisma/schema", schema);
   let schemaText = fs.readFileSync(schemaSrc, "utf-8");
-  if (databaseProvider !== "sqlite") {
+  if (databaseProvider !== "sqlite" && databaseProvider !== "turso") {
     schemaText = schemaText.replace(
       'provider = "sqlite"',
       `provider = "${
@@ -57,12 +70,19 @@ export const prismaInstaller: Installer = ({
   fs.mkdirSync(path.dirname(schemaDest), { recursive: true });
   fs.writeFileSync(schemaDest, schemaText);
 
-  const clientSrc = path.join(
-    extrasDir,
-    databaseProvider === "planetscale"
-      ? "src/server/db/db-prisma-planetscale.ts"
-      : "src/server/db/db-prisma.ts"
-  );
+  let dbFilePath: string;
+  switch (databaseProvider) {
+    case "planetscale":
+      dbFilePath = "src/server/db/db-prisma-planetscale.ts";
+      break;
+    case "turso":
+      dbFilePath = "src/server/db/db-prisma-turso.ts";
+      break;
+    default:
+      dbFilePath = "src/server/db/db-prisma.ts";
+  }
+
+  const clientSrc = path.join(extrasDir, dbFilePath);
   const clientDest = path.join(projectDir, "src/server/db.ts");
 
   // add postinstall and push script to package.json

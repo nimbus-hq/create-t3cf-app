@@ -1,16 +1,16 @@
 {
-  "name": "create-t3-app",
+  "name": "create-t3cf-app",
   "version": "7.37.0",
-  "description": "Create web application with the t3 stack",
+  "description": "Create web applications with the t3 stack",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/t3-oss/create-t3-app.git",
+    "url": "https://github.com/nimbus-hq/create-t3cf-app.git",
     "directory": "cli"
   },
   "keywords": [
-    "create-t3-app",
-    "init.tips",
+    "create-t3cf-app",
+    "cloudflare",
     "next.js",
     "t3-stack",
     "tailwind",
@@ -20,7 +20,7 @@
   "type": "module",
   "exports": "./dist/index.js",
   "bin": {
-    "create-t3-app": "./dist/index.js"
+    "create-t3cf-app": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -37,9 +37,9 @@
   "scripts": {
     "typecheck": "tsc",
     "build": "tsup",
-    "dev": "tsup --watch",
+    "dev": "bun src/index.ts",
     "clean": "rm -rf dist .turbo node_modules",
-    "start": "node dist/index.js",
+    "start": "bun src/index.ts",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "bun lint --fix",
     "format": "prettier '**/*.{cjs,mjs,ts,tsx,md,json}' --ignore-path ../.gitignore --ignore-unknown --no-error-on-unmatched-pattern --write",
@@ -64,8 +64,11 @@
   "devDependencies": {
     "@auth/drizzle-adapter": "^1.1.0",
     "@auth/prisma-adapter": "^1.6.0",
-    "@libsql/client": "^0.9.0",
+    "@cloudflare/next-on-pages": "1",
+    "@cloudflare/workers-types": "^4.20240919.0",
+    "@libsql/client": "^0.8.0",
     "@planetscale/database": "^1.19.0",
+    "@prisma/adapter-libsql": "^5.20.0",
     "@prisma/adapter-planetscale": "^5.14.0",
     "@prisma/client": "^5.14.0",
     "@t3-oss/env-nextjs": "^0.10.1",
@@ -79,6 +82,7 @@
     "@types/node": "^20.14.10",
     "drizzle-kit": "^0.24.0",
     "drizzle-orm": "^0.33.0",
+    "eslint-plugin-next-on-pages": "^1.13.2",
     "mysql2": "^3.11.0",
     "next": "^14.2.4",
     "next-auth": "^4.24.7",
@@ -93,6 +97,8 @@
     "tsup": "^6.7.0",
     "type-fest": "^3.13.1",
     "typescript": "^5.5.3",
+    "vercel": "^37.5.2",
+    "wrangler": "^3.78.6",
     "zod": "^3.23.8"
   }
 }

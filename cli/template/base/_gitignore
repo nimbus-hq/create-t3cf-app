@@ -39,6 +39,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# wrangler
+# do not commit your .dev.vars file to git
+.wrangler
+.dev.vars
+
 # typescript
 *.tsbuildinfo
 

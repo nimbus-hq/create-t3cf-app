@@ -2,14 +2,14 @@ import * as p from "@clack/prompts";
 import chalk from "chalk";
 import { Command } from "commander";
 
-import { CREATE_T3_APP, DEFAULT_APP_NAME } from "~/consts.js";
+import { CREATE_T3CF_APP, DEFAULT_APP_NAME } from "~/consts.js";
 import {
   databaseProviders,
   type AvailablePackages,
   type DatabaseProvider,
 } from "~/installers/index.js";
-import { getVersion } from "~/utils/getT3Version.js";
 import { getUserPkgManager } from "~/utils/getUserPkgManager.js";
+import { getVersion } from "~/utils/getVersion.js";
 import { IsTTYError } from "~/utils/isTTYError.js";
 import { logger } from "~/utils/logger.js";
 import { validateAppName } from "~/utils/validateAppName.js";
@@ -70,8 +70,10 @@ export const runCli = async (): Promise<CliResults> => {
   const cliResults = defaultOptions;
 
   const program = new Command()
-    .name(CREATE_T3_APP)
-    .description("A CLI for creating web applications with the t3 stack")
+    .name(CREATE_T3CF_APP)
+    .description(
+      "A CLI for creating web applications on Cloudflare with the t3 stack"
+    )
     .argument(
       "[dir]",
       "The name of the application, as well as the name of the directory to create"
@@ -162,9 +164,9 @@ export const runCli = async (): Promise<CliResults> => {
   // FIXME: TEMPORARY WARNING WHEN USING YARN 3. SEE ISSUE #57
   if (process.env.npm_config_user_agent?.startsWith("yarn/3")) {
     logger.warn(`  WARNING: It looks like you are using Yarn 3. This is currently not supported,
-  and likely to result in a crash. Please run create-t3-app with another
+  and likely to result in a crash. Please run create-t3cf-app with another
   package manager such as bun, npm, or Yarn Classic.
-  See: https://github.com/t3-oss/create-t3-app/issues/57`);
+  See: https://github.com/t3-oss/create-t3cf-app/issues/57`);
   }
 
   // Needs to be separated outside the if statement to correctly infer the type as string | undefined
@@ -258,18 +260,6 @@ export const runCli = async (): Promise<CliResults> => {
             message: "Would you like to use tRPC?",
           });
         },
-        authentication: () => {
-          return p.select({
-            message: "What authentication provider would you like to use?",
-            options: [
-              { value: "none", label: "None" },
-              { value: "next-auth", label: "NextAuth.js" },
-              // Maybe later
-              // { value: "clerk", label: "Clerk" },
-            ],
-            initialValue: "none",
-          });
-        },
         database: () => {
           return p.select({
             message: "What database ORM would you like to use?",
@@ -281,23 +271,102 @@ export const runCli = async (): Promise<CliResults> => {
             initialValue: "none",
           });
         },
-        appRouter: () => {
-          return p.confirm({
-            message: "Would you like to use Next.js App Router?",
-            initialValue: true,
+        // TODO: add pages support
+        // appRouter: () => {
+        //   return p.confirm({
+        //     message: "Would you like to use Next.js App Router?",
+        //     initialValue: true,
+        //   });
+        // },
+        authentication: () => {
+          const options: { value: string; label: string }[] = [
+            { value: "none", label: "None" },
+            {
+              value: "next-auth",
+              label:
+                "NextAuth.js " +
+                `(${chalk.yellow("Requires v5 which is currently in Beta")})`,
+            },
+            // Maybe later
+            // { value: "clerk", label: "Clerk" },
+          ];
+
+          return p.select({
+            message: "What authentication provider would you like to use?",
+            options,
+            initialValue: "none",
           });
         },
+        // authentication: ({ results }) => {
+        //   const isPagesRouter = !results.appRouter;
+        //   if (isPagesRouter) {
+        //     p.note(
+        //       chalk.yellow(
+        //         "NextAuth.js is currently unsupported with the Pages Router."
+        //       )
+        //     );
+        //   }
+
+        //   const options: { value: string; label: string }[] = [
+        //     { value: "none", label: "None" },
+        //     // Maybe later
+        //     // { value: "clerk", label: "Clerk" },
+        //   ];
+
+        //   if (!isPagesRouter) {
+        //     options.push({
+        //       value: "next-auth",
+        //       label: "NextAuth.js",
+        //     });
+        //   }
+
+        //   return p.select({
+        //     message: "What authentication provider would you like to use?",
+        //     options,
+        //     initialValue: "none",
+        //   });
+        // },
         databaseProvider: ({ results }) => {
           if (results.database === "none") return;
+          p.note(
+            chalk.yellow(`The following are currently unsupported:
+    - PostgreSQL
+    - MySQL
+    - Plain SQLite (must use Turso)`)
+          );
+
+          const options = [
+            // { value: "sqlite", label: "SQLite (LibSQL)" },
+            { value: "turso", label: "Turso (LibSQL)" },
+            // { value: "d1", label: "D1" },
+
+            /**
+             * TODO: add mysql support. Currently blocked by lack of lib support.
+             * Work is in progress so we will hopefully be able to add support soon.
+             *
+             * @see https://github.com/sidorares/node-mysql2
+             */
+            // { value: "mysql", label: "MySQL" },
+
+            /**
+             * TODO: add postgres support, may be possible with some clever patching.
+             * Main issue currently is Nextjs Edge limitations rather than worker limitations.
+             *
+             * @see https://github.com/porsager/postgres/issues/930
+             * @see https://github.com/vercel/next.js/discussions/50177 // relevant discussion
+             */
+            // { value: "postgres", label: "PostgreSQL" },
+
+            // TODO: add neon support
+            // { value: "neon", label: "Neon" },
+
+            { value: "planetscale", label: "PlanetScale" },
+          ];
+
           return p.select({
             message: "What database provider would you like to use?",
-            options: [
-              { value: "sqlite", label: "SQLite (LibSQL)" },
-              { value: "mysql", label: "MySQL" },
-              { value: "postgres", label: "PostgreSQL" },
-              { value: "planetscale", label: "PlanetScale" },
-            ],
-            initialValue: "sqlite",
+            options: options,
+            initialValue: "turso",
           });
         },
         ...(!cliResults.flags.noGit && {
@@ -349,21 +418,23 @@ export const runCli = async (): Promise<CliResults> => {
         (project.databaseProvider as DatabaseProvider) || "sqlite",
       flags: {
         ...cliResults.flags,
-        appRouter: project.appRouter ?? cliResults.flags.appRouter,
+        // appRouter: project.appRouter ?? cliResults.flags.appRouter,
+        appRouter: true,
         noGit: !project.git || cliResults.flags.noGit,
         noInstall: !project.install || cliResults.flags.noInstall,
         importAlias: project.importAlias ?? cliResults.flags.importAlias,
       },
     };
   } catch (err) {
-    // If the user is not calling create-t3-app from an interactive terminal, inquirer will throw an IsTTYError
+    // If the user is not calling create-t3cf-app from an interactive terminal, inquirer will throw an IsTTYError
     // If this happens, we catch the error, tell the user what has happened, and then continue to run the program with a default t3 app
     if (err instanceof IsTTYError) {
       logger.warn(`
-  ${CREATE_T3_APP} needs an interactive terminal to provide options`);
+  ${CREATE_T3CF_APP} needs an interactive terminal to provide options`);
 
       const shouldContinue = await p.confirm({
-        message: `Continue scaffolding a default T3 app?`,
+        // TODO: this wording may need an update
+        message: `Continue scaffolding a default T3 app built for Cloudflare?`,
         initialValue: true,
       });
 
@@ -372,7 +443,10 @@ export const runCli = async (): Promise<CliResults> => {
         process.exit(0);
       }
 
-      logger.info(`Bootstrapping a default T3 app in ./${cliResults.appName}`);
+      logger.info(
+        // TODO: this wording may need an update
+        `Bootstrapping a default T3 app for Cloudflare in ./${cliResults.appName}`
+      );
     } else {
       throw err;
     }

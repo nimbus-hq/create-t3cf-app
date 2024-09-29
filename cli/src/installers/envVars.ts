@@ -16,6 +16,8 @@ export const envVariablesInstaller: Installer = ({
 
   const usingDb = usingPrisma || usingDrizzle;
   const usingPlanetScale = databaseProvider === "planetscale";
+  // const usingLiqsql = databaseProvider === "sqlite";
+  const usingTurso = databaseProvider === "turso";
 
   const envContent = getEnvContent(
     !!usingAuth,
@@ -30,6 +32,9 @@ export const envVariablesInstaller: Installer = ({
     if (usingPlanetScale) {
       if (usingAuth) envFile = "with-auth-db-planetscale.js";
       else envFile = "with-db-planetscale.js";
+    } else if (usingTurso) {
+      if (usingAuth) envFile = "with-auth-db-libsql.js";
+      else envFile = "with-db-libsql.js";
     } else {
       if (usingAuth) envFile = "with-auth-db.js";
       else envFile = "with-db.js";
@@ -48,11 +53,11 @@ export const envVariablesInstaller: Installer = ({
     fs.copyFileSync(envSchemaSrc, envSchemaDest);
   }
 
-  const envDest = path.join(projectDir, ".env");
-  const envExampleDest = path.join(projectDir, ".env.example");
+  const devVarsDest = path.join(projectDir, ".dev.vars");
+  const envExampleDest = path.join(projectDir, ".dev.vars.example");
 
-  fs.writeFileSync(envDest, envContent, "utf-8");
-  fs.writeFileSync(envExampleDest, exampleEnvContent + envContent, "utf-8");
+  fs.writeFileSync(devVarsDest, devVarsContent + envContent, "utf-8");
+  fs.writeFileSync(envExampleDest, exampleDevVarsContent + envContent, "utf-8");
 };
 
 const getEnvContent = (
@@ -91,8 +96,22 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
       content += `DATABASE_URL="mysql://root:password@localhost:3306/${scopedAppName}"`;
     } else if (databaseProvider === "postgres") {
       content += `DATABASE_URL="postgresql://postgres:password@localhost:5432/${scopedAppName}"`;
-    } else if (databaseProvider === "sqlite") {
-      content += 'DATABASE_URL="file:./db.sqlite"';
+    } else if (databaseProvider === "turso" || databaseProvider === "sqlite") {
+      if (usingDrizzle) {
+        content += `# The @libsql/client/web does not support local file URLs.
+# You can run the sqlite database using "./start-database.sh"
+DATABASE_URL="http://127.0.0.1:8080"
+# Auth tokens aren't necessary when developing with local database
+# DATABASE_AUTH_TOKEN="your-auth-token-here"`;
+      } else if (databaseProvider === "turso") {
+        content += `# The @libsql/client/web does not support local file URLs.
+# Due to limitations of Prisma and the libsql client you can only use actual
+# Turso databases currently, you cannot run against a local one.
+DATABASE_URL="libsql://<db>-<username>.turso.io"
+DATABASE_AUTH_TOKEN="your-auth-token-here"`;
+      } else {
+        content += `DATABASE_URL="file:./db.sqlite"`;
+      }
     }
     content += "\n";
   }
@@ -105,6 +124,7 @@ DATABASE_URL='mysql://YOUR_MYSQL_URL_HERE?sslaccept=strict'`;
 # https://next-auth.js.org/configuration/options#secret
 # NEXTAUTH_SECRET=""
 NEXTAUTH_URL="http://localhost:3000"
+AUTH_TRUST_HOST=http://localhost:3000
 
 # Next Auth Discord Provider
 DISCORD_CLIENT_ID=""
@@ -121,14 +141,22 @@ DISCORD_CLIENT_SECRET=""
   return content;
 };
 
-const exampleEnvContent = `
-# Since the ".env" file is gitignored, you can use the ".env.example" file to
-# build a new ".env" file when you clone the repo. Keep this file up-to-date
-# when you add new variables to \`.env\`.
+const devVarsContent = `
+# Wrangler, the tool used to emulate the actual cloudflare runtime does not
+# read environment variables from .env, as a result you need to write
+# your environment variables to this file before you run your app.
+`
+
+  .trim()
+  .concat("\n\n");
+
+const exampleDevVarsContent = `
+# Since the ".dev.vars" file is gitignored, you can use the ".dev.vars.example" file to
+# build a new ".dev.vars" file when you clone the repo.
 
 # This file will be committed to version control, so make sure not to have any
 # secrets in it. If you are cloning this repo, create a copy of this file named
-# ".env" and populate it with your secrets.
+# ".dev.vars" and populate it with your secrets.
 `
   .trim()
   .concat("\n\n");

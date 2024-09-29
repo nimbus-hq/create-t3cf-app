@@ -9,10 +9,6 @@ export const PKG_ROOT = path.join(distPath, "../");
 
 //export const PKG_ROOT = path.dirname(require.main.filename);
 
-export const TITLE_TEXT = `   ___ ___ ___   __ _____ ___   _____ ____    __   ___ ___
-  / __| _ \\ __| /  \\_   _| __| |_   _|__ /   /  \\ | _ \\ _ \\
- | (__|   / _| / /\\ \\| | | _|    | |  |_ \\  / /\\ \\|  _/  _/
-  \\___|_|_\\___|_/‾‾\\_\\_| |___|   |_| |___/ /_/‾‾\\_\\_| |_|
-`;
-export const DEFAULT_APP_NAME = "my-t3-app";
-export const CREATE_T3_APP = "create-t3-app";
+export const TITLE_TEXT = `CREATE T3 CF APP`;
+export const DEFAULT_APP_NAME = "my-t3cf-app";
+export const CREATE_T3CF_APP = "create-t3cf-app";

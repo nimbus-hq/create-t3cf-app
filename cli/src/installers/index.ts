@@ -26,6 +26,8 @@ export const databaseProviders = [
   "mysql",
   "postgres",
   "sqlite",
+  // "d1",
+  "turso",
   "planetscale",
 ] as const;
 export type DatabaseProvider = (typeof databaseProviders)[number];
@@ -75,7 +77,9 @@ export const buildPkgInstallerMap = (
     installer: trpcInstaller,
   },
   dbContainer: {
-    inUse: ["mysql", "postgres"].includes(databaseProvider),
+    inUse:
+      ["mysql", "postgres", "turso"].includes(databaseProvider) ||
+      (databaseProvider === "sqlite" && packages.includes("drizzle")),
     installer: dbContainerInstaller,
   },
   envVariables: {
