@@ -4,10 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "predev": "cp .env .dev.vars",
     "dev": "next dev",
     "lint": "next lint",
-    "prebuild": "cp .env .dev.vars",
     "build": "next build",
     "start": "next start",
     "pages:build": "bunx @cloudflare/next-on-pages",
