@@ -1,21 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import About from "../components/landingPage/about.astro";
+import Banner from "../components/landingPage/banner.astro";
+import Community from "../components/landingPage/community/community.astro";
+import Features from "../components/landingPage/stack/stack.astro";
+import LandingPage from "../layouts/landingPage.astro";
 ---
 
-<Layout title="Create T3CF App" image="/img/t3-light.svg">
-  <div
-    class="flex flex-col justify-center align-middle w-full h-full text-center text-8xl max-lg:text-6xl max-sm:text-4xl text-white font-extrabold"
-  >
-    <h1 class="pt-10">The best way to start a</h1>
-    <h1>
-      <span class="text-blue-400">full-stack, </span>
-      <span class="text-blue-700">typesafe</span>
-    </h1>
-    <h1><span class="text-purple-700">Next.js </span> app</h1>
-    <h1
-      class="italic pt-4 max-sm:pt-1 text-5xl max-lg:text-3xl max-sm:text-xl text-cforange"
-    >
-      (with Cloudflare)
-    </h1>
-  </div>
-</Layout>
+<LandingPage>
+  <Banner />
+  <About />
+  <Features />
+  <Community />
+</LandingPage>

@@ -1,8 +1,21 @@
 {
-"extends": "astro/tsconfigs/strict",
-"compilerOptions": {
+  "extends": "astro/tsconfigs/strictest",
+  "compilerOptions": {
     "types": [
-        "@cloudflare/workers-types/2023-07-01"
-    ]
-}
+      "@cloudflare/workers-types/2023-07-01"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "skipLibCheck": true
+  },
+  "include": [
+    "src",
+    "astro.config.mjs",
+    ".eslintrc.cjs",
+    "**/*.js",
+    "**/*.cjs",
+    "**/*.mjs",
+    "../reset.d.ts",
+    "./tailwind.config.ts"
+  ]
 }
