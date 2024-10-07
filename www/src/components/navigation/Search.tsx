@@ -2,9 +2,9 @@
 
 import { useCallback, useRef, useState } from "react";
 
-import { ALGOLIA } from "../config";
+import { ALGOLIA } from "../../config";
 
-import "../styles/algolia/style.css";
+import "../../styles/algolia/style.css";
 
 import * as docSearchReact from "@docsearch/react";
 import clsx from "clsx";
